@@ -2,10 +2,10 @@ import express from 'express';
 import 'dotenv/config';
 
 import cors from 'cors';
-// import cookieParser from "cookie-parser";
+import cookieParser from "cookie-parser";
 import { errors } from 'celebrate';
 
-// import { connectMongoDB } from './db/connectMongoDB.js';
+import { connectMongoDB } from './db/connectMongoDB.js';
 
 import { errorHandler } from './middleware/errorHandler.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
@@ -20,7 +20,7 @@ const PORT = process.env.PORT ?? 3000;
 
 app.use(express.json());
 app.use(cors());
-// app.use(cookieParser());
+app.use(cookieParser());
 app.use(logger);
 
 app.get('/', (req, res) => {
@@ -35,7 +35,7 @@ app.use(notFoundHandler);
 app.use(errors());
 app.use(errorHandler);
 
-// await connectMongoDB();
+await connectMongoDB();
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

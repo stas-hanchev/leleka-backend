@@ -51,6 +51,13 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
+// userSchema.pre('save', function (next) {
+//   if (typeof this.birthDate === 'string') {
+//     const [day, month, year] = this.birthDate.split('.');
+//     this.birthDate = new Date(`${year}-${month}-${day}`);
+//   }
+// });
+
 userSchema.methods.toJSON = function () {
   const obj = this.toObject();
   delete obj.password;

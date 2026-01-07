@@ -37,7 +37,7 @@ const userSchema = new Schema(
     },
 
     // pregnancy
-    dueDate: {
+    birthDate: {
       type: Date,
       default: null,
     },

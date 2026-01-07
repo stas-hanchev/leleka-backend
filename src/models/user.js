@@ -11,7 +11,7 @@ const userSchema = new Schema(
       default: "https://ac.goit.global/fullstack/react/default-avatar.jpg",
     },
     birthDate: { type: String, required: false },
-    babyGender: { type: String, required: false } // update enum or
+    babyGender: { type: String, required: false }
   },
   { timestamps: true }
 );
@@ -21,7 +21,6 @@ userSchema.pre('save', function (next) {
     const [day, month, year] = this.birthDate.split('.');
     this.birthDate = new Date(`${year}-${month}-${day}`);
   }
-  next();
 });
 
 userSchema.methods.toJSON = function () {

@@ -18,10 +18,10 @@ import authRoutes from './routes/authRoutes.js';
 const app = express();
 const PORT = process.env.PORT ?? 3000;
 
+app.use(logger);
 app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
-app.use(logger);
 
 app.get('/', (req, res) => {
   res.status(200).json({ message: 'Hello world!' });

@@ -9,7 +9,7 @@ export const register = async (req, res, next) => {
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      throw createHttpError(409, 'Email already in use');
+      return next(createHttpError(409, 'Email already in use'));
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -45,12 +45,12 @@ export const login = async (req, res, next) => {
 
     const user = await User.findOne({ email });
     if (!user) {
-      throw createHttpError(401, 'Invalid credentials');
+      return next(createHttpError(401, 'Invalid credentials'));
     }
 
-    const isValidPassword = await bcrypt.compare(password, user.password);
-    if (!isValidPassword) {
-      throw createHttpError(401, 'Invalid credentials');
+    const isValid = await bcrypt.compare(password, user.password);
+    if (!isValid) {
+      return next(createHttpError(401, 'Invalid credentials'));
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
@@ -72,7 +72,6 @@ export const login = async (req, res, next) => {
 
 export const logout = async (req, res, next) => {
   try {
-    // просто повертаємо статус 204, як у твоєму ТЗ
     res.status(204).send();
   } catch (error) {
     next(error);

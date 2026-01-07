@@ -21,6 +21,8 @@
   "homepage": "https://github.com/stas-hanchev/leleka-backend#readme",
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
     "@types/multer": "^2.0.0",
     "eslint": "^9.39.1",
     "globals": "^16.5.0",

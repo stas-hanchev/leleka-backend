@@ -1,6 +1,6 @@
-import { User } from '../models/user.model.js';
+import { User } from '../models/user.js';
 import createHttpError from 'http-errors';
-import cloudinary from '../utils/saveFileToCloudinary.js';
+import {saveFileToCloudinary} from '../utils/saveFileToCloudinary.js';
 
 /** GET  user */
 export const getCurrentUser = async (req, res, next) => {
@@ -54,7 +54,7 @@ export const updateAvatar = async (req, res, next) => {
       throw createHttpError(400, 'Зображення не завантажене');
     }
 
-    const result = await cloudinary.uploader.upload(req.file.path, {
+    const result = await saveFileToCloudinary(req.file.path, {
       folder: 'avatars',
       transformation: [{ width: 250, height: 250, crop: 'fill' }],
     });

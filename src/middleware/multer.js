@@ -1,6 +1,6 @@
 import multer from 'multer';
 import path from 'path';
-import HttpError from '../utils/HttpError.js';
+import createHttpError from 'http-errors';
 
 const tempDir = path.resolve('tmp');
 
@@ -13,7 +13,7 @@ const storage = multer.diskStorage({
 
 const fileFilter = (_, file, cb) => {
   if (!file.mimetype.startsWith('image/')) {
-    cb(HttpError(400, 'Дозволено завантажувати лише зображення'));
+    return cb(createHttpError(400, 'Дозволено завантажувати лише зображення'));
   }
   cb(null, true);
 };
@@ -21,7 +21,7 @@ const fileFilter = (_, file, cb) => {
 const upload = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 2 * 1024 * 1024 },
+  limits: { fileSize: 2 * 1024 * 1024 }, // 2MB
 });
 
 export default upload;

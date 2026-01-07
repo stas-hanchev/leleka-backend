@@ -9,7 +9,7 @@ export const getCurrentUser = async (req, res, next) => {
 
     const user = await User.findById(_id);
     if (!user) {
-      throw createHttpError(404, 'Користувач не знайдений');
+      throw createHttpError(404, 'User not found');
     }
 
     res.status(200).json(user);
@@ -36,7 +36,7 @@ export const updateUser = async (req, res, next) => {
     );
 
     if (!updatedUser) {
-      throw createHttpError(404, 'Користувач не знайдений');
+      throw createHttpError(404, 'User not found');
     }
 
     res.status(200).json(updatedUser);
@@ -51,7 +51,7 @@ export const updateAvatar = async (req, res, next) => {
     const { _id } = req.user;
 
     if (!req.file) {
-      throw createHttpError(400, 'Зображення не завантажене');
+      throw createHttpError(400, 'Image not uploaded');
     }
 
     const result = await saveFileToCloudinary(req.file.path, {
@@ -66,7 +66,7 @@ export const updateAvatar = async (req, res, next) => {
     );
 
     if (!updatedUser) {
-      throw createHttpError(404, 'Користувач не знайдений');
+      throw createHttpError(404, 'User not found');
     }
 
     res.status(200).json({ avatarUrl: updatedUser.avatarUrl });

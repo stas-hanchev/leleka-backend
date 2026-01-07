@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 
-export type BabyGender = 'boy' | 'girl' | 'unknown';
+export type BabyGender = 'Хлопчик' | 'Дівчинка' | 'Ще не знаю';
 
 export interface User {
   _id: Types.ObjectId;

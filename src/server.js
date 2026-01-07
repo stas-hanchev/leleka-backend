@@ -11,6 +11,8 @@ import { errorHandler } from './middleware/errorHandler.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { logger } from './middleware/logger.js';
 
+import weeksRoutes from './routes/weeksRoutes.js';
+
 // import authRoutes from './routes/authRoutes.js';
 // import notesRouter from './routes/notesRoutes.js';
 // import userRoutes from './routes/userRoutes.js';
@@ -30,6 +32,7 @@ app.get('/', (req, res) => {
 // app.use(authRoutes);
 // app.use(notesRouter);
 // app.use(userRoutes);
+app.use(weeksRoutes);
 
 app.use(notFoundHandler);
 app.use(errors());

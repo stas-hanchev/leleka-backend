@@ -10,6 +10,7 @@ import { connectMongoDB } from './db/connectMongoDB.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { logger } from './middleware/logger.js';
+import tasksRoutes from './routes/tasksRoutes.js';
 
 // import authRoutes from './routes/authRoutes.js';
 // import notesRouter from './routes/notesRoutes.js';
@@ -30,6 +31,7 @@ app.get('/', (req, res) => {
 // app.use(authRoutes);
 // app.use(notesRouter);
 // app.use(userRoutes);
+app.use(tasksRoutes);
 
 app.use(notFoundHandler);
 app.use(errors());

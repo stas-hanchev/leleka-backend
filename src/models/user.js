@@ -47,18 +47,16 @@ const userSchema = new Schema(
       enum: ['boy', 'girl', 'unknown'],
       default: 'unknown',
     },
-    birthDate: { type: String, required: false },
-    babyGender: { type: String, required: false }
   },
   { timestamps: true }
 );
 
-userSchema.pre('save', function (next) {
-  if (typeof this.birthDate === 'string') {
-    const [day, month, year] = this.birthDate.split('.');
-    this.birthDate = new Date(`${year}-${month}-${day}`);
-  }
-});
+// userSchema.pre('save', function (next) {
+//   if (typeof this.birthDate === 'string') {
+//     const [day, month, year] = this.birthDate.split('.');
+//     this.birthDate = new Date(`${year}-${month}-${day}`);
+//   }
+// });
 
 userSchema.methods.toJSON = function () {
   const obj = this.toObject();

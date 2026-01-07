@@ -16,7 +16,7 @@ export const auth = async (req, res, next) => {
     const user = await User.findById(session.userId);
     if (!user) throw createHttpError(401, 'User not found');
 
-    req.user = user; // 👈 тут ключове
+    req.user = user;
     next();
   } catch (error) {
     next(error);

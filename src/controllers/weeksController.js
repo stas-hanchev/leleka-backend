@@ -5,25 +5,33 @@ import { getPregnancyStats } from '../utils/calculatePregnancy.js';
 
 export const getPublicDashboard = async (req, res, next) => {
   try {
-    const weekNumber = Number(req.query.week) || 1;
-    const babyData = await BabyState.findOne({ weekNumber });
+    const weekNumber = 1;
 
-    if (!babyData) return next(createHttpError(404, 'Тиждень не знайдено'));
+    const babyData = await BabyState.findOne({ weekNumber });
+    if (!babyData) {
+      return next(createHttpError(404, 'Дані для 1 тижня не знайдено'));
+    }
+
+    const LAST_WEEK = 40;
+    const daysRemaining = (LAST_WEEK - weekNumber) * 7;
 
     res.json({
       weekNumber,
-      daysRemaining: 280,
-      babyData
+      daysRemaining,
+      baby: babyData.babyInfo,
+      adviceForMom: babyData.adviceForMom
     });
-  } catch (error) { next(error); }
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const getPrivateDashboard = async (req, res, next) => {
 
   try {
-    const { dueDate } = req.user;
+    const { birthDate } = req.user;
 
-    const { currentWeek, daysRemaining } = getPregnancyStats(dueDate);
+    const { currentWeek, daysRemaining } = getPregnancyStats(birthDate);
 
     const babyData = await BabyState.findOne({ weekNumber: currentWeek });
 

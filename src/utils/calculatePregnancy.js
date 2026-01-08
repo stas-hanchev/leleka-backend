@@ -1,8 +1,8 @@
-export const getPregnancyStats = (dueDate) => {
-  if (!dueDate) return { currentWeek: 1, daysRemaining: 280 };
+export const getPregnancyStats = (birthDate) => {
+  if (!birthDate) return { currentWeek: 1, daysRemaining: 280 };
 
   const today = new Date();
-  const expectedDate = new Date(dueDate);
+  const expectedDate = new Date(birthDate);
 
   const diffTime = expectedDate - today;
   const daysRemaining = Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));

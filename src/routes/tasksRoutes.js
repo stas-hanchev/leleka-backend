@@ -2,13 +2,13 @@
 import { celebrate } from "celebrate";
 import { getAllTasks, createTask, updateTask } from "../controllers/tasksController.js";
 import { createTaskSchema, updateTaskSchema } from "../validations/taskValidation.js";
-import { authenticateTasks } from "../middleware/authenticateTasks.js";
+import { authenticate } from "../middleware/authenticateTasks.js";
 import { Router } from "express";
 
 const tasksRoutes = Router();
 
 
-tasksRoutes.use(authenticateTasks);
+tasksRoutes.use(authenticate);
 
 tasksRoutes.get("/api/tasks", getAllTasks);
 

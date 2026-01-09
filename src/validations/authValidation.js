@@ -15,9 +15,12 @@ export const loginUserSchema = {
   }),
 };
 
-// // Валідатор для welcome PATCH
-// export const welcomeSchema = {
-//   [Segments.BODY]: Joi.object({
-//     message: Joi.string().max(255).required(),
-//   }),
-// };
+// --- Welcome форма ---
+export const welcomeSchema = {
+  [Segments.BODY]: Joi.object({
+    gender: Joi.string().valid('boy', 'girl', null).optional(),
+    dueDate: Joi.string()
+      .pattern(/^\d{4}-\d{2}-\d{2}$/)
+      .required(),
+  }),
+};

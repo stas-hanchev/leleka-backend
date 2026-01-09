@@ -1,6 +1,7 @@
 import { User } from '../models/user.js';
 import bcrypt from 'bcrypt';
 import createHttpError from 'http-errors';
+
 import { Session } from '../models/session.js';
 import { createSession, setSessionCookies } from '../services/auth.js';
 
@@ -80,29 +81,47 @@ export const logoutUser = async (req, res) => {
   res.status(204).send();
 };
 
-// // PATCH /api/auth/:id/welcome
-// export const sendWelcome = async (req, res, next) => {
-//   try {
-//     const { id } = req.params;
-//     const { name, gender, dueDate } = req.body;
+// PATCH /api/auth/:id/welcome
+export const sendWelcome = async (req, res) => {
+  const { id } = req.params;
+  const { gender, dueDate } = req.body;
 
-//     const user = await User.findById(id);
-//     if (!user) {
-//       return next(createHttpError(404, 'User not found'));
-//     }
+  const user = await User.findById(id);
+  if (!user) {
+    throw createHttpError(404, 'User not found');
+  }
 
-//     // Оновлюємо профіль користувача
-//     if (name) user.name = name;
-//     if (gender) user.babyGender = gender;
-//     if (dueDate) user.birthDate = new Date(dueDate);
+  // Оновлюємо стать дитини
+  if (gender) {
+    if (!['boy', 'girl', null].includes(gender)) {
+      throw createHttpError(400, 'Invalid gender value');
+    }
+    user.babyGender = gender;
+  }
 
-//     await user.save();
+  // Оновлюємо dueDate
+  if (dueDate) {
+    const date = new Date(dueDate);
+    const now = new Date();
+    const minDate = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000); // +1 week
+    const maxDate = new Date(now.getTime() + 40 * 7 * 24 * 60 * 60 * 1000); // +40 weeks
 
-//     res.status(200).json({
-//       message: 'Welcome data saved successfully',
-//       user,
-//     });
-//   } catch (err) {
-//     next(err);
-//   }
-// };
+    if (isNaN(date.getTime()) || date < minDate || date > maxDate) {
+      throw createHttpError(
+        400,
+        `dueDate must be between ${minDate
+          .toISOString()
+          .slice(0, 10)} and ${maxDate.toISOString().slice(0, 10)}`,
+      );
+    }
+
+    user.birthDate = date;
+  }
+
+  await user.save();
+
+  res.status(200).json({
+    message: 'Welcome data saved successfully',
+    user,
+  });
+};

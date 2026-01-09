@@ -1,79 +1,110 @@
-import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import { User } from '../models/user.js';
+import bcrypt from 'bcrypt';
+import createHttpError from 'http-errors';
+import { Session } from '../models/session.js';
+import { createSession, setSessionCookies } from '../services/auth.js';
 
-export const register = async (req, res) => {
+// -------- REGISTER --------
+export const registerUser = async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
 
+    // Перевіряємо, чи існує користувач з такою поштою
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(409).json({ message: 'Email already in use' });
+      return next(createHttpError(400, 'Email in use'));
     }
 
+    // Хешуємо пароль
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await User.create({ name, email, password: hashedPassword });
-
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: '1d',
+    // Створюємо користувача
+    const newUser = await User.create({
+      name,
+      email,
+      password: hashedPassword,
     });
 
-    res.status(201).json({
-      token,
-      user: { id: user._id, name: user.name, email: user.email },
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: error.message });
+    // Створюємо сесію і ставимо кукі
+    const newSession = await createSession(newUser._id);
+    setSessionCookies(res, newSession);
+
+    res
+      .status(201)
+      .json({ message: 'User registered successfully', userId: newUser._id });
+  } catch (err) {
+    next(err);
   }
 };
 
-export const login = async (req, res) => {
+// -------- LOGIN --------
+export const loginUser = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
-    if (!user) return res.status(401).json({ message: 'Invalid credentials' });
+    if (!user) {
+      return next(createHttpError(401, 'Invalid credentials'));
+    }
 
     const isValidPassword = await bcrypt.compare(password, user.password);
-    if (!isValidPassword)
-      return res.status(401).json({ message: 'Invalid credentials' });
+    if (!isValidPassword) {
+      return next(createHttpError(401, 'Invalid credentials'));
+    }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: '1d',
-    });
+    // Видаляємо стару сесію користувача
+    await Session.deleteOne({ userId: user._id });
 
-    res.status(200).json({
-      token,
-      user: { id: user._id, name: user.name, email: user.email },
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: error.message });
+    // Створюємо нову сесію і ставимо кукі
+    const newSession = await createSession(user._id);
+    setSessionCookies(res, newSession);
+
+    res.status(200).json({ message: 'Login successful', userId: user._id });
+  } catch (err) {
+    next(err);
   }
 };
 
-export const logout = async (req, res) => {
-  res.status(204).send();
-};
-
-export const sendWelcome = async (req, res) => {
+// -------- LOGOUT --------
+export const logoutUser = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const { message } = req.body;
+    // Видаляємо сесію користувача
+    await Session.deleteOne({ _id: req.cookies.sessionId });
 
-    const user = await User.findByIdAndUpdate(
-      id,
-      { welcomeMessage: message },
-      { new: true },
-    );
+    // Очищаємо кукі
+    res.clearCookie('accessToken');
+    res.clearCookie('refreshToken');
+    res.clearCookie('sessionId');
 
-    if (!user) return res.status(404).json({ message: 'User not found' });
-
-    res.status(200).json({ message: 'Welcome message sent', user });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: error.message });
+    res.status(204).send();
+  } catch (err) {
+    next(err);
   }
 };
+
+// // PATCH /api/auth/:id/welcome
+// export const sendWelcome = async (req, res, next) => {
+//   try {
+//     const { id } = req.params;
+//     const { name, gender, dueDate } = req.body;
+
+//     const user = await User.findById(id);
+//     if (!user) {
+//       return next(createHttpError(404, 'User not found'));
+//     }
+
+//     // Оновлюємо профіль користувача
+//     if (name) user.name = name;
+//     if (gender) user.babyGender = gender;
+//     if (dueDate) user.birthDate = new Date(dueDate);
+
+//     await user.save();
+
+//     res.status(200).json({
+//       message: 'Welcome data saved successfully',
+//       user,
+//     });
+//   } catch (err) {
+//     next(err);
+//   }
+// };

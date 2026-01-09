@@ -15,9 +15,9 @@ export const loginUserSchema = {
   }),
 };
 
-// Валідатор для welcome PATCH
-export const welcomeSchema = {
-  [Segments.BODY]: Joi.object({
-    message: Joi.string().max(255).required(),
-  }),
-};
+// // Валідатор для welcome PATCH
+// export const welcomeSchema = {
+//   [Segments.BODY]: Joi.object({
+//     message: Joi.string().max(255).required(),
+//   }),
+// };

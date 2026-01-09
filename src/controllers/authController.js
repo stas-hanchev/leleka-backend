@@ -66,20 +66,18 @@ export const loginUser = async (req, res, next) => {
 };
 
 // -------- LOGOUT --------
-export const logoutUser = async (req, res, next) => {
-  try {
-    // Видаляємо сесію користувача
-    await Session.deleteOne({ _id: req.cookies.sessionId });
+export const logoutUser = async (req, res) => {
+  const { sessionId } = req.cookies;
 
-    // Очищаємо кукі
-    res.clearCookie('accessToken');
-    res.clearCookie('refreshToken');
-    res.clearCookie('sessionId');
-
-    res.status(204).send();
-  } catch (err) {
-    next(err);
+  if (sessionId) {
+    await Session.deleteOne({ _id: sessionId });
   }
+
+  res.clearCookie('sessionId');
+  res.clearCookie('accessToken');
+  res.clearCookie('refreshToken');
+
+  res.status(204).send();
 };
 
 // // PATCH /api/auth/:id/welcome

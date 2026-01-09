@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { celebrate } from 'celebrate';
 import {
-  register,
-  login,
-  logout,
+  registerUser,
+  loginUser,
+  logoutUser,
   sendWelcome,
 } from '../controllers/authController.js';
 import {
@@ -11,20 +11,19 @@ import {
   loginUserSchema,
   welcomeSchema,
 } from '../validations/authValidation.js';
-import { authMiddleware } from '../middleware/authMiddleware.js';
+import { authenticate } from '../middleware/authMiddleware.js';
 
 const router = Router();
 
-router.post('/api/auth/register', celebrate(registerUserSchema), register);
+router.post('/api/auth/register', celebrate(registerUserSchema), registerUser);
+router.post('/api/auth/login', celebrate(loginUserSchema), loginUser);
 
-router.post('/api/auth/login', celebrate(loginUserSchema), login);
-
-router.post('/api/auth/logout', authMiddleware, logout);
+router.post('/api/auth/logout', authenticate, logoutUser);
 
 router.patch(
-  '/api/auth/:id/welcome',
+  '/api/auth/:id',
   celebrate(welcomeSchema),
-  authMiddleware,
+  authenticate,
   sendWelcome,
 );
 

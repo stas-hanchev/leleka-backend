@@ -21,6 +21,9 @@ import weeksRoutes from './routes/weeksRoutes.js';
 
 // import authRoutes from './routes/authRoutes.js';
 
+import weeksRoutes from './routes/weeksRoutes.js';
+
+// import authRoutes from './routes/authRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 
 // import notesRouter from './routes/notesRoutes.js';
@@ -46,6 +49,7 @@ app.use(authRoutes);
 // app.use(userRoutes);
 
 app.use(weeksRoutes);
+
 app.use('/users', userRouter);
 app.use(tasksRoutes);
 

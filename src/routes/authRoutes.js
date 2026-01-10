@@ -11,7 +11,7 @@ import {
   loginUserSchema,
   welcomeSchema,
 } from '../validations/authValidation.js';
-import { authenticate } from '../middleware/authMiddleware.js';
+import { authenticate } from '../middleware/authenticate.js';
 
 const router = Router();
 

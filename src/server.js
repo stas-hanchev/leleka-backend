@@ -21,6 +21,8 @@ import authRoutes from './routes/authRoutes.js';
 // import notesRouter from './routes/notesRoutes.js';
 // import userRoutes from './routes/userRoutes.js';
 
+import diariesRoutes from './routes/diariesRoutes.js';
+
 const app = express();
 const PORT = process.env.PORT ?? 3000;
 
@@ -41,7 +43,7 @@ app.use(weeksRoutes);
 
 app.use('/users', userRouter);
 app.use(tasksRoutes);
-
+app.use('/api/diaries', diariesRoutes);
 
 app.use(notFoundHandler);
 app.use(errors());

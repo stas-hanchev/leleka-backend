@@ -6,7 +6,7 @@ export const createDiaryEntry = async (req, res, next) => {
   try {
     const diaryEntry = await Diary.create({
       ...req.body,
-      owner: req.user._id,
+      owner: req.user.id,
     });
     res.status(201).json({
       status: 201,
@@ -20,7 +20,7 @@ export const createDiaryEntry = async (req, res, next) => {
 // 2. Получение ВСЕХ записей (для обновления списка по ТЗ)
 export const getDiaryEntries = async (req, res, next) => {
   try {
-    const entries = await Diary.find({ owner: req.user._id }).sort({
+    const entries = await Diary.find({ owner: req.user.id }).sort({
       date: -1,
     });
     res.status(200).json({
@@ -38,7 +38,7 @@ export const getDiaryEntry = async (req, res, next) => {
     const { entryId } = req.params;
     const diaryEntry = await Diary.findOne({
       _id: entryId,
-      owner: req.user._id,
+      owner: req.user.id,
     });
     if (!diaryEntry) {
       return next(createHttpError(404, 'Запис у щоденнику не знайдено'));
@@ -57,7 +57,7 @@ export const updateDiaryEntry = async (req, res, next) => {
   try {
     const { entryId } = req.params;
     const diaryEntry = await Diary.findOneAndUpdate(
-      { _id: entryId, owner: req.user._id },
+      { _id: entryId, owner: req.user.id },
       req.body,
       { new: true },
     );

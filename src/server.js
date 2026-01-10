@@ -13,7 +13,12 @@ import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { logger } from './middleware/logger.js';
 import tasksRoutes from './routes/tasksRoutes.js';
 import diaryRoutes from './routes/diaryRoutes.js';
+
+import weeksRoutes from './routes/weeksRoutes.js';
+
+// import authRoutes from './routes/authRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+
 // import notesRouter from './routes/notesRoutes.js';
 // import userRoutes from './routes/userRoutes.js';
 
@@ -32,9 +37,13 @@ app.get('/', (req, res) => {
 app.use(authRoutes);
 // app.use(notesRouter);
 // app.use(userRoutes);
+
+app.use(weeksRoutes);
+
 app.use('/users', userRouter);
 app.use(tasksRoutes);
 app.use('/diary', diaryRoutes);
+
 app.use(notFoundHandler);
 app.use(errors());
 app.use(errorHandler);

@@ -1,5 +1,5 @@
 import express from 'express';
-import { auth } from '../middleware/auth.js';
+import { authenticate } from '../middleware/authenticate.js';
 import upload from '../middleware/multer.js';
 import {
   getCurrentUser,
@@ -9,8 +9,8 @@ import {
 
 const router = express.Router();
 
-router.get('/current', auth, getCurrentUser);
-router.patch('/', auth, updateUser);
-router.patch('/avatar', auth, upload.single('avatar'), updateAvatar);
+router.get('/current', authenticate, getCurrentUser);
+router.patch('/', authenticate, updateUser);
+router.patch('/avatar', authenticate, upload.single('avatar'), updateAvatar);
 
 export default router;

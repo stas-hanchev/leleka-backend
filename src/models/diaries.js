@@ -7,8 +7,8 @@ const diarySchema = new mongoose.Schema(
       required: true,
     },
     mood: {
-      type: String,
-      enum: ["happy", "sad", "neutral", "anxious"],
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Emotion",
       required: true,
     },
     note: {

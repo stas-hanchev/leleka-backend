@@ -6,11 +6,11 @@ import {
   updateDiarySchema,
   diaryEntryIdSchema
 } from '../validations/diaryValidation.js';
-import { auth } from '../middleware/auth.js';
+import { authenticate } from '../middleware/authenticate.js';
 
 const router = Router();
 
-router.use(auth);
+router.use(authenticate);
 
 router.get('/api/diaries', diaryControllers.getDiaryEntries);
 

@@ -5,12 +5,12 @@ import {
   createDiarySchema,
   updateDiarySchema,
 } from '../validations/diaryValidation.js';
-import { auth } from '../middleware/auth.js';
+import { authenticate } from '../middleware/authenticate.js';
 
 const router = Router();
 
 // Защищаем маршруты твоей мидлварой
-router.use(auth);
+router.use(authenticate);
 router.get('/', diaryControllers.getDiaryEntries);
 router.post(
   '/',
@@ -23,5 +23,5 @@ router.patch(
   celebrate(updateDiarySchema),
   diaryControllers.updateDiaryEntry,
 );
-
+router.delete('/:entryId', diaryControllers.deleteDiaryEntry);
 export default router;

@@ -73,3 +73,24 @@ export const updateDiaryEntry = async (req, res, next) => {
     next(error);
   }
 };
+export const deleteDiaryEntry = async (req, res, next) => {
+  try {
+    const { entryId } = req.params;
+    const diaryEntry = await Diary.findOneAndDelete({
+      _id: entryId,
+      owner: req.user.id,
+    });
+    if (!diaryEntry) {
+      return next(createHttpError(404, 'Запис не знайдено'));
+    }
+    res
+      .status(200)
+      .json({
+        status: 200,
+        message: 'Запис успішно видалено',
+        data: { id: entryId },
+      });
+  } catch (error) {
+    next(error);
+  }
+};

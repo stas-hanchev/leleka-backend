@@ -1,7 +1,6 @@
 import createHttpError from 'http-errors';
 import { Diary } from '../models/diary.js';
 
-// 1. Создание записи
 export const createDiaryEntry = async (req, res, next) => {
   try {
     const diaryEntry = await Diary.create({
@@ -17,7 +16,7 @@ export const createDiaryEntry = async (req, res, next) => {
     next(error);
   }
 };
-// 2. Получение ВСЕХ записей (для обновления списка по ТЗ)
+
 export const getDiaryEntries = async (req, res, next) => {
   try {
     const entries = await Diary.find({ owner: req.user.id }).sort({
@@ -32,7 +31,7 @@ export const getDiaryEntries = async (req, res, next) => {
     next(error);
   }
 };
-// 3. Получение ОДНОЙ записи (для редактирования)
+
 export const getDiaryEntry = async (req, res, next) => {
   try {
     const { entryId } = req.params;
@@ -52,7 +51,7 @@ export const getDiaryEntry = async (req, res, next) => {
     next(error);
   }
 };
-// 4. Обновление записи
+
 export const updateDiaryEntry = async (req, res, next) => {
   try {
     const { entryId } = req.params;
@@ -69,6 +68,25 @@ export const updateDiaryEntry = async (req, res, next) => {
       message: 'Запис успішно оновлено',
       data: diaryEntry,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteDiaryEntry = async (req, res, next) => {
+  try {
+    const { entryId } = req.params;
+
+    const diary = await Diary.findOneAndDelete({
+      _id: entryId,
+      owner: req.user._id,
+    });
+
+    if (!diary) {
+      return res.status(404).json({ message: "Diary not found" });
+    }
+
+    res.json({ message: "Diary deleted successfully" });
   } catch (error) {
     next(error);
   }

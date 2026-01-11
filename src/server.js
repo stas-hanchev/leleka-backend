@@ -12,6 +12,7 @@ import { errorHandler } from './middleware/errorHandler.js';
 import { notFoundHandler } from './middleware/notFoundHandler.js';
 import { logger } from './middleware/logger.js';
 import tasksRoutes from './routes/tasksRoutes.js';
+import diaryRoutes from './routes/diaryRoutes.js';
 
 import weeksRoutes from './routes/weeksRoutes.js';
 
@@ -41,7 +42,7 @@ app.use(weeksRoutes);
 
 app.use('/users', userRouter);
 app.use(tasksRoutes);
-
+app.use('/diary', diaryRoutes);
 
 app.use(notFoundHandler);
 app.use(errors());

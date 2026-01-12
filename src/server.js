@@ -40,7 +40,7 @@ app.use(authRoutes);
 
 app.use(weeksRoutes);
 
-app.use('/users', userRouter);
+app.use('/api/users', userRouter);
 app.use(tasksRoutes);
 app.use('/diary', diaryRoutes);
 

@@ -14,6 +14,6 @@ tasksRoutes.get("/api/tasks", getAllTasks);
 
 tasksRoutes.post("/api/tasks", celebrate(createTaskSchema), createTask);
 
-tasksRoutes.patch("/api/tasks/:taskId", celebrate(updateTaskSchema), updateTask);
+tasksRoutes.patch("/api/tasks/:taskId/status", celebrate(updateTaskSchema), updateTask);
 
 export default tasksRoutes;

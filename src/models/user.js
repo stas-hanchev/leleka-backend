@@ -44,7 +44,7 @@ const userSchema = new Schema(
 
     babyGender: {
       type: String,
-      enum: ['boy', 'girl', 'unknown'],
+      enum: ['Хлопчик', 'Дівчинка', 'Ще не знаю'],
       default: 'unknown',
     },
   },

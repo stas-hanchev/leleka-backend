@@ -76,17 +76,20 @@ export const updateDiaryEntry = async (req, res, next) => {
 export const deleteDiaryEntry = async (req, res, next) => {
   try {
     const { entryId } = req.params;
-
-    const diary = await Diary.findOneAndDelete({
+    const diaryEntry = await Diary.findOneAndDelete({
       _id: entryId,
-      owner: req.user._id,
+      owner: req.user.id,
     });
-
-    if (!diary) {
-      return res.status(404).json({ message: "Diary not found" });
+    if (!diaryEntry) {
+      return next(createHttpError(404, 'Запис не знайдено'));
     }
-
-    res.json({ message: "Diary deleted successfully" });
+    res
+      .status(200)
+      .json({
+        status: 200,
+        message: 'Запис успішно видалено',
+        data: { id: entryId },
+      });
   } catch (error) {
     next(error);
   }

@@ -35,14 +35,10 @@ app.get('/', (req, res) => {
 });
 
 app.use(authRoutes);
-// app.use(notesRouter);
-// app.use(userRoutes);
-
 app.use(weeksRoutes);
-
-app.use('/api/users', userRouter);
+app.use(userRouter);
 app.use(tasksRoutes);
-app.use('/diary', diaryRoutes);
+app.use(diaryRoutes);
 
 app.use(notFoundHandler);
 app.use(errors());

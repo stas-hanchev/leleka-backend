@@ -1,27 +1,17 @@
 import multer from 'multer';
-import path from 'path';
 import createHttpError from 'http-errors';
 
-const tempDir = path.resolve('tmp');
-
-const storage = multer.diskStorage({
-  destination: tempDir,
-  filename: (_, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
+export const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 2 * 1024 * 1024,
+  },
+  fileFilter: (req, file, cb) => {
+    if (!file.mimetype?.startsWith('image/')) {
+      return cb(createHttpError(400, 'Invalid file type. Only JPEG, PNG, GIF, and WebP are allowed.'));
+    }
+    cb(null, true);
   },
 });
 
-const fileFilter = (_, file, cb) => {
-  if (!file.mimetype.startsWith('image/')) {
-    return cb(createHttpError(400, 'Invalid file type. Only JPEG, PNG, GIF, and WebP are allowed.'));
-  }
-  cb(null, true);
-};
 
-const upload = multer({
-  storage,
-  fileFilter,
-  limits: { fileSize: 2 * 1024 * 1024 }, // 2MB
-});
-
-export default upload;

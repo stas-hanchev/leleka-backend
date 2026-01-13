@@ -1,6 +1,6 @@
 import express from 'express';
 import { authenticate } from '../middleware/authenticate.js';
-import upload from '../middleware/multer.js';
+import {upload} from '../middleware/multer.js';
 import {
   getCurrentUser,
   updateUser,

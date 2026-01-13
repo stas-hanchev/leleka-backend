@@ -10,10 +10,10 @@ const tasksRoutes = Router();
 
 tasksRoutes.use(authenticate);
 
-tasksRoutes.get("/api/tasks", getAllTasks);
+tasksRoutes.get("/tasks", getAllTasks);
 
-tasksRoutes.post("/api/tasks", celebrate(createTaskSchema), createTask);
+tasksRoutes.post("/tasks", celebrate(createTaskSchema), createTask);
 
-tasksRoutes.patch("/api/tasks/:taskId/status", celebrate(updateTaskSchema), updateTask);
+tasksRoutes.patch("/tasks/:taskId/status", celebrate(updateTaskSchema), updateTask);
 
 export default tasksRoutes;

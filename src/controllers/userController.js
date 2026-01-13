@@ -66,7 +66,10 @@ export const updateAvatar = async (req, res, next) => {
       throw createHttpError(404, 'User not found');
     }
 
-    res.status(200).json({ avatarUrl: updatedUser.avatarUrl });
+    res.status(200).json({
+      message: 'Аватар оновлено успішно',
+      avatarUrl: updatedUser.avatarUrl
+     });
   } catch (error) {
     next(error);
   }

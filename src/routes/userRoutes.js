@@ -9,8 +9,8 @@ import {
 
 const router = express.Router();
 
-router.get('/current', authenticate, getCurrentUser);
-router.patch('/current', authenticate, updateUser);
-router.patch('/avatar', authenticate, upload.single('avatar'), updateAvatar);
+router.get('/api/users/current', authenticate, getCurrentUser);
+router.patch('/api/users/current', authenticate, updateUser);
+router.patch('/api/users/avatar', authenticate, upload.single('avatar'), updateAvatar);
 
 export default router;

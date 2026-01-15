@@ -6,13 +6,13 @@ import { weekNumberSchema, weekQuerySchema } from '../validations/weeks.js';
 
 const router = Router();
 
-router.get('/weeks/public', celebrate(weekQuerySchema), ctrl.getPublicDashboard);
+router.get('/api/weeks/public', celebrate(weekQuerySchema), ctrl.getPublicDashboard);
 
 router.use(authenticate);
 
-router.get('/weeks/dashboard', ctrl.getPrivateDashboard);
+router.get('/api/weeks/dashboard', ctrl.getPrivateDashboard);
 
-router.get('/weeks/:weekNumber/baby', celebrate(weekNumberSchema), ctrl.getBabyDevelopment);
-router.get('/weeks/:weekNumber/body', celebrate(weekNumberSchema), ctrl.getMomBody);
+router.get('/api/weeks/:weekNumber/baby', celebrate(weekNumberSchema), ctrl.getBabyDevelopment);
+router.get('/api/weeks/:weekNumber/body', celebrate(weekNumberSchema), ctrl.getMomBody);
 
 export default router;

@@ -5,7 +5,7 @@ export const createTask = async (req, res) => {
     const task = await Task.create({ ...req.body, userId: req.user._id });
 
     const safeTask = {
-      id: task._id,
+      _id: task._id,
       name: task.name,
       date: task.date,
       isDone: task.isDone,
@@ -22,7 +22,7 @@ export const getAllTasks = async (req, res) => {
     const tasks = await Task.find({ userId: req.user._id }).sort({ date: 1 });
 
     const safeTasks = tasks.map(task => ({
-      id: task._id,
+      _id: task._id,
       name: task.name,
       date: task.date,
       isDone: task.isDone,
@@ -50,7 +50,7 @@ export const updateTask = async (req, res) => {
     }
 
     const safeTask = {
-      id: task._id,
+      _id: task._id,
       name: task.name,
       date: task.date,
       isDone: task.isDone,

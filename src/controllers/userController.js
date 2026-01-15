@@ -54,10 +54,7 @@ export const updateAvatar = async (req, res, next) => {
       throw createHttpError(400, 'Image not uploaded');
     }
 
-    const result = await saveFileToCloudinary(req.file.path, {
-      folder: 'avatars',
-      transformation: [{ width: 250, height: 250, crop: 'fill' }],
-    });
+    const result = await saveFileToCloudinary(req.file.buffer);
 
     const updatedUser = await User.findByIdAndUpdate(
       _id,
@@ -69,7 +66,10 @@ export const updateAvatar = async (req, res, next) => {
       throw createHttpError(404, 'User not found');
     }
 
-    res.status(200).json({ avatarUrl: updatedUser.avatarUrl });
+    res.status(200).json({
+      message: 'Аватар оновлено успішно',
+      avatarUrl: updatedUser.avatarUrl
+     });
   } catch (error) {
     next(error);
   }

@@ -1,7 +1,6 @@
 import createHttpError from 'http-errors';
 import { Diary } from '../models/diary.js';
 
-// 1. Создание записи
 export const createDiaryEntry = async (req, res, next) => {
   try {
     const diaryEntry = await Diary.create({
@@ -17,7 +16,7 @@ export const createDiaryEntry = async (req, res, next) => {
     next(error);
   }
 };
-// 2. Получение ВСЕХ записей (для обновления списка по ТЗ)
+
 export const getDiaryEntries = async (req, res, next) => {
   try {
     const entries = await Diary.find({ owner: req.user.id }).sort({
@@ -32,7 +31,7 @@ export const getDiaryEntries = async (req, res, next) => {
     next(error);
   }
 };
-// 3. Получение ОДНОЙ записи (для редактирования)
+
 export const getDiaryEntry = async (req, res, next) => {
   try {
     const { entryId } = req.params;
@@ -52,7 +51,7 @@ export const getDiaryEntry = async (req, res, next) => {
     next(error);
   }
 };
-// 4. Обновление записи
+
 export const updateDiaryEntry = async (req, res, next) => {
   try {
     const { entryId } = req.params;
@@ -73,6 +72,7 @@ export const updateDiaryEntry = async (req, res, next) => {
     next(error);
   }
 };
+
 export const deleteDiaryEntry = async (req, res, next) => {
   try {
     const { entryId } = req.params;
@@ -83,13 +83,30 @@ export const deleteDiaryEntry = async (req, res, next) => {
     if (!diaryEntry) {
       return next(createHttpError(404, 'Запис не знайдено'));
     }
-    res
-      .status(200)
-      .json({
-        status: 200,
-        message: 'Запис успішно видалено',
-        data: { id: entryId },
-      });
+    res.status(200).json({
+      status: 200,
+      message: 'Запис успішно видалено',
+      data: { id: entryId },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+export const deleteDiaryEntry = async (req, res, next) => {
+  try {
+    const { entryId } = req.params;
+    const diaryEntry = await Diary.findOneAndDelete({
+      _id: entryId,
+      owner: req.user.id,
+    });
+    if (!diaryEntry) {
+      return next(createHttpError(404, 'Запис не знайдено'));
+    }
+    res.status(200).json({
+      status: 200,
+      message: 'Запис успішно видалено',
+      data: { id: entryId },
+    });
   } catch (error) {
     next(error);
   }

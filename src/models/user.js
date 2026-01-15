@@ -31,7 +31,7 @@ const userSchema = new Schema(
       maxlength: 30,
     },
 
-    avatarURL: {
+    avatarUrl: {
       type: String,
       default: 'https://ac.goit.global/fullstack/react/default-avatar.jpg',
     },

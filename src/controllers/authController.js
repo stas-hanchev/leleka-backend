@@ -82,7 +82,7 @@ export const logoutUser = async (req, res) => {
 // PATCH /api/auth/:id/welcome
 export const sendWelcome = async (req, res) => {
   const { id } = req.params;
-  const { gender, dueDate } = req.body;
+  const { gender, birthDate } = req.body;
 
   const user = await User.findById(id);
   if (!user) {
@@ -91,15 +91,15 @@ export const sendWelcome = async (req, res) => {
 
   // Оновлюємо стать дитини
   if (gender) {
-    if (!['boy', 'girl', null].includes(gender)) {
+    if (!['boy', 'girl', 'unknown'].includes(gender)) {
       throw createHttpError(400, 'Invalid gender value');
     }
     user.babyGender = gender;
   }
 
-  // Оновлюємо dueDate
-  if (dueDate) {
-    const date = new Date(dueDate);
+  // Оновлюємо birthDate
+  if (birthDate) {
+    const date = new Date(birthDate);
     const now = new Date();
     const minDate = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000); // +1 week
     const maxDate = new Date(now.getTime() + 40 * 7 * 24 * 60 * 60 * 1000); // +40 weeks
@@ -107,7 +107,7 @@ export const sendWelcome = async (req, res) => {
     if (isNaN(date.getTime()) || date < minDate || date > maxDate) {
       throw createHttpError(
         400,
-        `dueDate must be between ${minDate
+        `birthDate must be between ${minDate
           .toISOString()
           .slice(0, 10)} and ${maxDate.toISOString().slice(0, 10)}`,
       );
@@ -127,39 +127,21 @@ export const sendWelcome = async (req, res) => {
 //-------------------------------------------------------------------------------------------------------------------------------
 
 export const refreshUserSession = async (req, res) => {
-  // 1. Знаходимо поточну сесію за id сесії та рефреш токеном
-  const session = await Session.findOne({
-    _id: req.cookies.sessionId,
-    refreshToken: req.cookies.refreshToken,
-  });
+  const refreshToken = req.cookies.refreshToken;
+  if (!refreshToken) throw createHttpError(401, 'Refresh token missing');
 
-  // 2. Якщо такої сесії нема, повертаємо помилку
-  if (!session) {
-    throw createHttpError(401, 'Session not found');
-  }
+  const session = await Session.findOne({ refreshToken });
+  if (!session) throw createHttpError(401, 'Session not found');
 
-  // 3. Якщо сесія існує, перевіряємо валідність рефреш токена
-  const isSessionTokenExpired =
-    new Date() > new Date(session.refreshTokenValidUntil);
+  const isExpired = new Date() > new Date(session.refreshTokenValidUntil);
+  if (isExpired) throw createHttpError(401, 'Session token expired');
 
-  // Якщо термін дії рефреш токена вийшов, повертаємо помилку
-  if (isSessionTokenExpired) {
-    throw createHttpError(401, 'Session token expired');
-  }
+  await Session.deleteOne({ _id: session._id });
 
-  // 4. Якщо всі перевірки пройшли добре, видаляємо поточну сесію
-  await Session.deleteOne({
-    _id: req.cookies.sessionId,
-    refreshToken: req.cookies.refreshToken,
-  });
-
-  // 5. Створюємо нову сесію та додаємо кукі
   const newSession = await createSession(session.userId);
   setSessionCookies(res, newSession);
 
-  res.status(200).json({
-    message: 'Session refreshed',
-  });
+  res.status(200).json({ message: 'Session refreshed' });
 };
 
 export const requestResetEmail = async (req, res) => {

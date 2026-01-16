@@ -25,7 +25,7 @@ router.post('/api/auth/login', celebrate(loginUserSchema), loginUser);
 router.post('/api/auth/logout', authenticate, logoutUser);
 
 //------------------------------------------------------------------------------------------------
-router.post('/auth/refresh', refreshUserSession);
+router.post('/api/auth/refresh', refreshUserSession);
 router.post(
   '/auth/request-reset-email',
   celebrate(requestResetEmailSchema),

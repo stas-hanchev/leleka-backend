@@ -32,7 +32,7 @@ export const resetPasswordSchema = {
 export const welcomeSchema = {
   [Segments.BODY]: Joi.object({
     gender: Joi.string().valid('boy', 'girl', null).optional(),
-    dueDate: Joi.string()
+    birthDate: Joi.string()
       .pattern(/^\d{4}-\d{2}-\d{2}$/)
       .required(),
   }),

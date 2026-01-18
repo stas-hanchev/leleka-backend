@@ -34,7 +34,7 @@ app.use(
     credentials: true,
   },
   {
-    origin: 'https://leleka-frontend-rust.vercel.app/',
+    origin: 'https://leleka-frontend-rust.vercel.app',
     credentials: true,
   })
 );

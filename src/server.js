@@ -38,7 +38,6 @@ app.use(
   })
 );
 
-
 app.use(cookieParser());
 
 app.get('/', (req, res) => {

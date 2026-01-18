@@ -32,6 +32,10 @@ app.use(
   cors({
     origin: 'http://localhost:3000',
     credentials: true,
+  },
+  {
+    origin: 'https://leleka-frontend-rust.vercel.app/',
+    credentials: true,
   })
 );
 

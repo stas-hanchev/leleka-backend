@@ -20,10 +20,12 @@ const isProd = process.env.NODE_ENV === 'production';
 export const setSessionCookies = (res, session) => {
   const common = {
     httpOnly: true,
-    secure: isProd,                 // prod: true, localhost: false
+    secure: isProd ? true : false,                 // prod: true, localhost: false
     sameSite: isProd ? 'none' : 'lax',
     path: '/',
   };
+
+  console.log('!!! Common:', common);
 
   res.cookie('accessToken', session.accessToken, {
     ...common,

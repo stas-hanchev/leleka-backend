@@ -30,14 +30,14 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: 'http://localhost:3000',
-    credentials: true,
-  },
-  {
-    origin: 'https://leleka-frontend-rust.vercel.app',
+    origin: [
+      'http://localhost:3000',
+      'https://leleka-frontend-rust.vercel.app'
+    ],
     credentials: true,
   })
 );
+
 
 app.use(cookieParser());
 

@@ -23,6 +23,7 @@ import authRoutes from './routes/authRoutes.js';
 // import userRoutes from './routes/userRoutes.js';
 
 const app = express();
+app.set('trust proxy', 1);
 const PORT = process.env.PORT ?? 3000;
 
 app.use(logger);
@@ -32,12 +33,11 @@ app.use(
   cors({
     origin: [
       'http://localhost:3000',
-      'https://leleka-frontend-rust.vercel.app'
+      'https://leleka-frontend-rust.vercel.app',
     ],
     credentials: true,
-  })
+  }),
 );
-
 
 app.use(cookieParser());
 

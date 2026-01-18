@@ -20,9 +20,10 @@ const isProd = process.env.NODE_ENV === 'production';
 export const setSessionCookies = (res, session) => {
   const common = {
     httpOnly: true,
-    secure: isProd ? true : false,                 // prod: true, localhost: false
+    secure: isProd ? true : false,
     sameSite: isProd ? 'none' : 'lax',
     path: '/',
+    domain: isProd ? '.vercel.app' : ''
   };
 
   console.log('!!! Common:', common);

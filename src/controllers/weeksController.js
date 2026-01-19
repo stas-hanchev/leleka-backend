@@ -15,12 +15,13 @@ export const getPublicDashboard = async (req, res, next) => {
     const LAST_WEEK = 40;
     const daysRemaining = (LAST_WEEK - weekNumber) * 7;
 
-    res.json({
+    const response = {
       weekNumber,
       daysRemaining,
-      baby: babyData.babyInfo,
-      adviceForMom: babyData.adviceForMom
-    });
+      babyData
+    };
+
+    res.json(response);
   } catch (error) {
     next(error);
   }

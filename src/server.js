@@ -16,11 +16,10 @@ import diaryRoutes from './routes/diaryRoutes.js';
 
 import weeksRoutes from './routes/weeksRoutes.js';
 
-// import authRoutes from './routes/authRoutes.js';
+
 import authRoutes from './routes/authRoutes.js';
 
-// import notesRouter from './routes/notesRoutes.js';
-// import userRoutes from './routes/userRoutes.js';
+
 
 const app = express();
 app.set('trust proxy', 1);

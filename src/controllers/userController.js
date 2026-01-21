@@ -2,7 +2,7 @@ import { User } from '../models/user.js';
 import createHttpError from 'http-errors';
 import {saveFileToCloudinary} from '../utils/saveFileToCloudinary.js';
 
-/** GET  user */
+
 export const getCurrentUser = async (req, res, next) => {
   try {
     const { _id } = req.user;
@@ -18,7 +18,7 @@ export const getCurrentUser = async (req, res, next) => {
   }
 };
 
-/**  Update user  */
+
 export const updateUser = async (req, res, next) => {
   try {
     const { _id } = req.user;
@@ -45,7 +45,7 @@ export const updateUser = async (req, res, next) => {
   }
 };
 
-/**  Update avatar */
+
 export const updateAvatar = async (req, res, next) => {
   try {
     const { _id } = req.user;

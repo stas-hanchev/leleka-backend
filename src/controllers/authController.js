@@ -79,7 +79,7 @@ export const logoutUser = async (req, res) => {
   res.status(204).send();
 };
 
-// PATCH /api/auth/:id/welcome
+
 export const sendWelcome = async (req, res) => {
   const { id } = req.params;
   const { gender, birthDate } = req.body;
@@ -89,7 +89,7 @@ export const sendWelcome = async (req, res) => {
     throw createHttpError(404, 'User not found');
   }
 
-  // Оновлюємо стать дитини
+
   if (gender) {
     if (!['boy', 'girl', 'unknown'].includes(gender)) {
       throw createHttpError(400, 'Invalid gender value');
@@ -97,7 +97,7 @@ export const sendWelcome = async (req, res) => {
     user.babyGender = gender;
   }
 
-  // Оновлюємо birthDate
+
   if (birthDate) {
     const date = new Date(birthDate);
     const now = new Date();
@@ -124,7 +124,7 @@ export const sendWelcome = async (req, res) => {
   });
 };
 
-//-------------------------------------------------------------------------------------------------------------------------------
+
 
 export const refreshUserSession = async (req, res) => {
   const refreshToken = req.cookies.refreshToken;
@@ -149,26 +149,25 @@ export const requestResetEmail = async (req, res) => {
 
   const user = await User.findOne({ email });
 
-  // Якщо користувача нема — навмисно повертаємо ту саму "успішну"
-  // відповідь без відправлення листа (anti user enumeration).
+
   if (!user) {
     return res.status(200).json({ message: 'Password reset email sent successfully' });
   }
 
-	// Користувач є — генеруємо короткоживучий JWT і відправляємо лист
+
   const resetToken = jwt.sign(
     { sub: user._id, email },
     process.env.JWT_SECRET,
     { expiresIn: '15m' },
   );
 
-  	// 1. Формуємо шлях до шаблона
+
   const templatePath = path.resolve('src/templates/reset-password-email.html');
-  // 2. Читаємо шаблон
+
   const templateSource = await fs.readFile(templatePath, 'utf-8');
-  // 3. Готуємо шаблон до заповнення
+
   const template = handlebars.compile(templateSource);
-  // 4. Формуємо із шаблона HTML документ з динамічними даними
+
   const html = template({
     name: user.username,
     link: `${process.env.FRONTEND_DOMAIN}/reset-password?token=${resetToken}`,
@@ -179,7 +178,7 @@ export const requestResetEmail = async (req, res) => {
       from: process.env.SMTP_FROM,
       to: email,
       subject: 'Reset your password',
-      // 5. Передаємо HTML у функцію надписання пошти
+
       html,
     });
   } catch {
@@ -192,33 +191,32 @@ export const requestResetEmail = async (req, res) => {
 export const resetPassword = async (req, res) => {
 	const { token, password } = req.body;
 
-	// 1. Перевіряємо/декодуємо токен
+
   let payload;
   try {
     payload = jwt.verify(token, process.env.JWT_SECRET);
   } catch {
-	// Повертаємо помилку якщо проблема при декодуванні
+
     throw createHttpError(401, 'Invalid or expired token');
   }
 
-  // 2. Шукаємо користувача
+
   const user = await User.findOne({  _id: payload.sub,  email: payload.email });
   if (!user) {
     throw createHttpError(404, 'User not found');
   }
 
-  // 3. Якщо користувач існує
-  // створюємо новий пароль і оновлюємо користувача
+
   const hashedPassword = await bcrypt.hash(password, 10);
   await User.updateOne(
 	  { _id: user._id },
 	  { password: hashedPassword }
   );
 
-  // 4. Інвалідовуємо всі можливі попередні сесії користувача
+
   await Session.deleteMany({ userId: user._id });
 
-	// 5. Повертаємо успішну відповідь
+
   res.status(200).json({
     message: 'Password reset successfully',
   });

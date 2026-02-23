@@ -2,7 +2,7 @@ import { Schema, model } from 'mongoose';
 
 const userSchema = new Schema(
   {
-    // auth
+
     email: {
       type: String,
       required: true,
@@ -22,7 +22,7 @@ const userSchema = new Schema(
       default: null,
     },
 
-    // profile
+
     name: {
       type: String,
       required: true,
@@ -36,7 +36,7 @@ const userSchema = new Schema(
       default: 'https://ac.goit.global/fullstack/react/default-avatar.jpg',
     },
 
-    // pregnancy
+
     birthDate: {
       type: Date,
       default: null,
@@ -51,12 +51,7 @@ const userSchema = new Schema(
   { timestamps: true },
 );
 
-// userSchema.pre('save', function (next) {
-//   if (typeof this.birthDate === 'string') {
-//     const [day, month, year] = this.birthDate.split('.');
-//     this.birthDate = new Date(`${year}-${month}-${day}`);
-//   }
-// });
+
 
 userSchema.methods.toJSON = function () {
   const obj = this.toObject();

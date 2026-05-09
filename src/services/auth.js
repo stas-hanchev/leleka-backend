@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { FIFTEEN_MINUTES, TEN_YEAR } from '../constants/time.js';
+import { TEN_YEAR } from '../constants/time.js';
 import { Session } from '../models/session.js';
 
 export const createSession = async (userId) => {
@@ -30,7 +30,7 @@ export const setSessionCookies = (res, session) => {
 
   res.cookie('accessToken', session.accessToken, {
     ...common,
-    maxAge: FIFTEEN_MINUTES,
+    maxAge: TEN_YEAR,
   });
 
   res.cookie('refreshToken', session.refreshToken, {
